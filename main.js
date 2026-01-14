@@ -7,6 +7,7 @@ const fromCurr = document.querySelector(".from select");
 const toCurr = document.querySelector(".to select");
 const msg = document.querySelector(".msg");
 const swapBtn = document.querySelector("#swap");
+let amount = document.querySelector(".amount input");
 
 for (let select of dropdowns) {
   for (currCode in countryList) {
@@ -28,6 +29,9 @@ for (let select of dropdowns) {
     }
   });
 }
+amount.addEventListener("input", (evt) => {
+  updateExchangeRate();
+});
 
 swapBtn.addEventListener("click", () => {
   // Swap currency codes
@@ -54,7 +58,7 @@ const updateFlag = (element) => {
 const updateExchangeRate = async () => {
   let amount = document.querySelector(".amount input");
   let amtVal = amount.value;
-  if (amtVal === "" || amtVal < 1) {
+  if (amtVal === "" || amtVal < 0) {
     amtVal = 1;
     amount.value = "1";
   }
