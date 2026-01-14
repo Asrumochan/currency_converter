@@ -1,61 +1,93 @@
-const base_url="https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2024.3.2/v1/currencies";
+// const base_url =
+//   "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2026.1.14/v1/currencies";
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+  const formattedDate = `${year}.${month}.${day}`;
+
+  const base_url = `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@${formattedDate}/v1/currencies`;
+
 
 const dropdowns = document.querySelectorAll(".dropdown select");
-const btn=document.querySelector("form button");
-const fromCurr=document.querySelector(".from select");
-const toCurr=document.querySelector(".to select");
-const msg= document.querySelector(".msg");
+const btn = document.querySelector("form button");
+const fromCurr = document.querySelector(".from select");
+const toCurr = document.querySelector(".to select");
+const msg = document.querySelector(".msg");
+const swapBtn = document.querySelector("#swap");
+const fromCountry = document.querySelector("#from-country");
 
-for (let select of dropdowns){
-    for(currCode in countryList){
-        let newOption = document.createElement("option");
-        newOption.innerText=currCode;
-        newOption.value=currCode;
-        if(select.name==="from" && currCode==="USD"){
-            newOption.selected="selected";
-        }
-        if(select.name==="to" && currCode==="INR"){
-            newOption.selected="selected";
-        }
-        select.append(newOption) ;   
+for (let select of dropdowns) {
+  for (currCode in countryList) {
+    let newOption = document.createElement("option");
+    newOption.innerText = currCode;
+    newOption.value = currCode;
+    if (select.name === "from" && currCode === "NPR") {
+      newOption.selected = "selected";
     }
-    select.addEventListener("change",(evt)=>{
-        updateFlag(evt.target);
-    })
-}
-
-
-const updateFlag = (element)=>{
-    let currCode=element.value;
-    let countryCode= countryList[currCode];
-    let newSrc=`https://flagsapi.com/${countryCode}/flat/64.png`;
-    let img = element.parentElement.querySelector("img");
-    img.src=newSrc;
-}
-const updateExchangeRate =async ()=>{
-    let amount = document.querySelector(".amount input");
-    let amtVal= amount.value;
-    if(amtVal ==="" || amtVal <1){
-        amtVal=1;
-        amount.value="1";
+    if (select.name === "to" && currCode === "INR") {
+      newOption.selected = "selected";
     }
-
-    const URL= `${base_url}/${fromCurr.value.toLowerCase()}.json`;
-    let response = await fetch(URL);
-    let data = await response.json();
-    let rate=data[fromCurr.value.toLowerCase()][toCurr.value.toLowerCase()];
-    let finalAmt= rate * amtVal;
-    console.log(finalAmt)
-    msg.innerText=`${amtVal} ${fromCurr.value} = ${finalAmt} ${toCurr.value}`
+    select.append(newOption);
+  }
+  select.addEventListener("change", (evt) => {
+    updateFlag(evt.target);
+    if (evt.target.name === "from") {
+      updateFromCountry();
+    }
+  });
 }
 
-btn.addEventListener("click",(evt)=>{
-    evt.preventDefault();
-    updateExchangeRate();
-})
+swapBtn.addEventListener("click", () => {
+  // Swap currency codes
+  let temp = fromCurr.value;
+  fromCurr.value = toCurr.value;
+  toCurr.value = temp;
 
-window.addEventListener("load",()=> {
-    updateExchangeRate();
-})
+  // Update flags
+  updateFlag(fromCurr);
+  updateFlag(toCurr);
 
- 
+  // Update country display
+  updateFromCountry();
+
+  // Update exchange rate
+  updateExchangeRate();
+});
+
+const updateFlag = (element) => {
+  let currCode = element.value;
+  let countryCode = countryList[currCode];
+  let newSrc = `https://flagsapi.com/${countryCode}/flat/64.png`;
+  let img = element.parentElement.querySelector("img");
+  img.src = newSrc;
+};
+
+const updateFromCountry = () => {
+  fromCountry.innerText = countryNames[fromCurr.value] || fromCurr.value;
+};
+const updateExchangeRate = async () => {
+  let amount = document.querySelector(".amount input");
+  let amtVal = amount.value;
+  if (amtVal === "" || amtVal < 1) {
+    amtVal = 1;
+    amount.value = "1";
+  }
+
+  const URL = `${base_url}/${fromCurr.value.toLowerCase()}.json`;
+  let response = await fetch(URL);
+  let data = await response.json();
+  let rate = data[fromCurr.value.toLowerCase()][toCurr.value.toLowerCase()];
+  let finalAmt = rate * amtVal;
+  console.log(finalAmt);
+  msg.innerText = `${amtVal} ${fromCurr.value} = ${finalAmt} ${toCurr.value}`;
+};
+
+btn.addEventListener("click", (evt) => {
+  evt.preventDefault();
+  updateExchangeRate();
+});
+
+window.addEventListener("load", () => {
+  updateExchangeRate();
+});
