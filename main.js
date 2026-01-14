@@ -1,13 +1,5 @@
-// const base_url =
-//   "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2026.1.14/v1/currencies";
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth() + 1;
-  const day = today.getDate();
-  const formattedDate = `${year}.${month}.${day}`;
-
-  const base_url = `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@${formattedDate}/v1/currencies`;
-
+const base_url =
+  "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies";
 
 const dropdowns = document.querySelectorAll(".dropdown select");
 const btn = document.querySelector("form button");
