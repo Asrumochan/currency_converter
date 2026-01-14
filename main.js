@@ -72,11 +72,6 @@ const updateExchangeRate = async () => {
   msg.innerText = `${amtVal} ${fromCurr.value} = ${finalAmt} ${toCurr.value}`;
 };
 
-btn.addEventListener("click", (evt) => {
-  evt.preventDefault();
-  updateExchangeRate();
-});
-
 window.addEventListener("load", () => {
   updateExchangeRate();
 });
