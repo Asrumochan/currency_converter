@@ -7,7 +7,6 @@ const fromCurr = document.querySelector(".from select");
 const toCurr = document.querySelector(".to select");
 const msg = document.querySelector(".msg");
 const swapBtn = document.querySelector("#swap");
-const fromCountry = document.querySelector("#from-country");
 
 for (let select of dropdowns) {
   for (currCode in countryList) {
@@ -40,9 +39,6 @@ swapBtn.addEventListener("click", () => {
   updateFlag(fromCurr);
   updateFlag(toCurr);
 
-  // Update country display
-  updateFromCountry();
-
   // Update exchange rate
   updateExchangeRate();
 });
@@ -55,9 +51,6 @@ const updateFlag = (element) => {
   img.src = newSrc;
 };
 
-const updateFromCountry = () => {
-  fromCountry.innerText = countryNames[fromCurr.value] || fromCurr.value;
-};
 const updateExchangeRate = async () => {
   let amount = document.querySelector(".amount input");
   let amtVal = amount.value;
