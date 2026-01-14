@@ -58,7 +58,7 @@ const updateFlag = (element) => {
 const updateExchangeRate = async () => {
   let amount = document.querySelector(".amount input");
   let amtVal = amount.value;
-  if (amtVal === "" || amtVal < 0) {
+  if (amtVal < 0) {
     amtVal = 1;
     amount.value = "1";
   }
